@@ -12,6 +12,7 @@ function wrapWithFunctionCall(expr, fnName) {
     return `${fnName}(${expr})`;
 }
 
+//TODO: USE PARSER!
 const RecursionLibrary = (function() {
     function createNativeModel(fn) {
         const fnName = fn.name
