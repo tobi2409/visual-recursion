@@ -6,21 +6,21 @@ diese Beispiel-Nodes haben aber keine Auswirkung auf den Algorithmus, sondern di
 wichtig ist, dass die deltas angegeben werden,
 wobei man im Laufe der Entwicklung auch eine Mustererkennung entwickeln kann für die Übertragung von Beispiel-Nodes auf delta
 
-Die Schwäche von appendChilds ist die Performance.
+Die Schwäche von appendChildren ist die Performance.
 
 Dies soll in zwei Wegen gelöst werden.
-1.) mehrere Abstraktionsschichten von appendChilds (angefangen von einem ganz minimalen Template bis zu diesem komplexen Template)
-    inkl. Parametrisierungen, welche node-Attribute mitgeliefert werden sollen, ob im Node childs erstellt werden sollen etc.
+1.) mehrere Abstraktionsschichten von appendChildren (angefangen von einem ganz minimalen Template bis zu diesem komplexen Template)
+    inkl. Parametrisierungen, welche node-Attribute mitgeliefert werden sollen, ob im Node children erstellt werden sollen etc.
 2.) (besonders für mathematische Funktionen wie fib, fak), bei denen die Liste sowie die Erstellung der delta-Liste nur eine visuelle Funktion hat,
     soll ein Compiler die Listenstruktur in eine "native" Struktur umwandeln
 '''
 
-def appendChilds(lst, delta, assignCallback = (lambda node: node['value']), combineCallback = (lambda node: node['value']),
-        resultConditionCallback = (lambda node: node['childs'] == []), resultNodeCallback = (lambda node: node), expandOnEmptyDelta = False,
+def appendChildren(lst, delta, assignCallback = (lambda node: node['value']), combineCallback = (lambda node: node['value']),
+        resultConditionCallback = (lambda node: node['children'] == []), resultNodeCallback = (lambda node: node), expandOnEmptyDelta = False,
         rootValue = None, assignResultStoreIn = '', combineResultStoreIn = ''):
         
-    def factorNode(value, currentListIndex, lstSize, layer, childs, parent):
-        return {'value': value, 'currentListIndex': currentListIndex, 'listSize': lstSize, 'layer': layer, 'childs': childs, 'parent': parent}
+    def factorNode(value, currentListIndex, lstSize, layer, children, parent):
+        return {'value': value, 'currentListIndex': currentListIndex, 'listSize': lstSize, 'layer': layer, 'children': children, 'parent': parent}
 
     def setValue(node, storeIn, value):
         if storeIn == '':
@@ -31,7 +31,7 @@ def appendChilds(lst, delta, assignCallback = (lambda node: node['value']), comb
 
             node['value'][storeIn] = value
 
-    def _appendChilds(_lst, delta, layer=1, parent=None, originalLst=lst):
+    def _appendChildren(_lst, delta, layer=1, parent=None, originalLst=lst):
         treeResult = []
         result = []
 
@@ -49,8 +49,8 @@ def appendChilds(lst, delta, assignCallback = (lambda node: node['value']), comb
             deltaed = delta(node, _lst, originalLst)
 
             if deltaed != [] or expandOnEmptyDelta: # Node aufnehmen, wenn Kinder existieren ODER wir auch Blätter erzwingen wollen
-                childNodes, nextResult = _appendChilds(deltaed, delta, layer=layer + 1, parent=id(node), originalLst=lst)
-                node['childs'].extend(childNodes)
+                childNodes, nextResult = _appendChildren(deltaed, delta, layer=layer + 1, parent=id(node), originalLst=lst)
+                node['children'].extend(childNodes)
 
                 setValue(node, combineResultStoreIn, combineCallback(node)) # für Bottom-Up-Rekursion
 
@@ -66,8 +66,8 @@ def appendChilds(lst, delta, assignCallback = (lambda node: node['value']), comb
         return treeResult, result
 
     root = factorNode(rootValue, -1, -1, 0, [], -1)
-    childs, result = _appendChilds(lst, delta, parent=id(root))
-    root['childs'].extend(childs)
+    children, result = _appendChildren(lst, delta, parent=id(root))
+    root['children'].extend(children)
     return root, result
 
 def getObject(id):

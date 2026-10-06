@@ -5,7 +5,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
-from recursionlibrary import appendChilds, getObject
+from recursionlibrary import appendChildren, getObject
 
 from json import dumps
 
@@ -21,6 +21,6 @@ def flatten(lst):
     def resultNodeCallback(node):
         return node['value']
 
-    print(dumps(appendChilds(lst, delta, resultNodeCallback=resultNodeCallback), indent=2))
+    print(dumps(appendChildren(lst, delta, resultNodeCallback=resultNodeCallback), indent=2))
 
 flatten([2, 5, 1, 7, [3, 8, [9, [4, 1], 0], 2], 6, 4])

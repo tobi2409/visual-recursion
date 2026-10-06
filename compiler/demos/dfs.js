@@ -5,15 +5,15 @@ import RecursionLibrary from '../recursion-library.js';
 function dfs(tree) {
     return {
         delta: function (node) {
-            return ['#node.children[0]#']
+            return ['#node.children#[0]']
         },
         
         combine: function (node) {
-            return '#node.children[0].value#'
+            return '#node.children#[0]'
         },
 
         until: function (node) {
-            return { condition: '#node.children.length === 0#', result: '#node.value#' }
+            return { condition: '#node.children#.length === 0', result: '#node#' }
         }
     }
 }

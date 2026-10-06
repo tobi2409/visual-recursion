@@ -5,7 +5,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
-from recursionlibrary import appendChilds, getObject
+from recursionlibrary import appendChildren, getObject
 
 from json import dumps
 
@@ -18,10 +18,10 @@ def mergeSort(lst):
         return [node['value'][:mid], node['value'][mid:]]
 
     def combineCallback(node):
-        if len(node['childs']) == 0:
+        if len(node['children']) == 0:
             return node['value']
 
-        left, right = node['childs'][0]['value'], node['childs'][1]['value']
+        left, right = node['children'][0]['value'], node['children'][1]['value']
         merged = []
         i = j = 0
         while i < len(left) and j < len(right):
@@ -41,7 +41,7 @@ def mergeSort(lst):
     def resultNodeCallback(node):
         return node['value']
 
-    print(dumps(appendChilds([lst], delta,
+    print(dumps(appendChildren([lst], delta,
         combineCallback=combineCallback,
         resultConditionCallback=resultConditionCallback, resultNodeCallback=resultNodeCallback, expandOnEmptyDelta=True), indent=2))
 

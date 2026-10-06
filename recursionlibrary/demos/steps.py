@@ -5,7 +5,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
-from recursionlibrary import appendChilds, getObject
+from recursionlibrary import appendChildren, getObject
 
 from json import dumps
 
@@ -23,6 +23,6 @@ def steps(s):
     def assignCallback(node):
         return node['value'] + getObject(node['parent'])['value']
         
-    print(dumps(appendChilds([i for i in range(1, s + 1)], delta, assignCallback=assignCallback, rootValue=0), indent=2))
+    print(dumps(appendChildren([i for i in range(1, s + 1)], delta, assignCallback=assignCallback, rootValue=0), indent=2))
 
 steps(5)

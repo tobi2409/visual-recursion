@@ -1,11 +1,12 @@
-// Simple marker-based transformation
-function transformNodeValueToParam(expr, paramName) {
-    return expr.replace(/#node\.value#/g, paramName);
+// Simple marker-based transformation (new markers: #node# and #node.children[n]#)
+function transformNodeToParam(expr, paramName) {
+    // Replace '#node#' (the node's value) with the function parameter
+    return expr.replace(/#node#/g, paramName);
 }
 
 function transformNodeChildrenToDeltaed(expr) {
-    // Replace #node.children[i].value# -> deltaed[i]
-    return expr.replace(/#node\.children(\[\d+\])\.value#/g, 'deltaed$1');
+    // Replace generic '#node.children#' -> 'deltaed'
+    return expr.replace(/#node\.children#/g, 'deltaed');
 }
 
 function wrapWithFunctionCall(expr, fnName) {
@@ -25,21 +26,21 @@ const RecursionLibrary = (function() {
         const recursionInput = fn()
 
         const deltaDescription = recursionInput.delta()
-        // Transform each delta expression: #node.value# -> paramName, then wrap with function call
+        // Transform each delta expression: '#node#' -> paramName, then wrap with function call
         const nativeDelta = deltaDescription.map((d) => {
-            const transformed = transformNodeValueToParam(d, paramName)
+            const transformed = transformNodeToParam(d, paramName)
             return wrapWithFunctionCall(transformed, fnName)
         })
         
         const combineDescription = recursionInput.combine()
-        // Transform combine: #node.value# -> paramName, #node.children# -> deltaed
+        // Transform combine: indexed children first, then generic children, then node param
         let nativeCombine = transformNodeChildrenToDeltaed(combineDescription)
-        nativeCombine = transformNodeValueToParam(nativeCombine, paramName)
+        nativeCombine = transformNodeToParam(nativeCombine, paramName)
 
         const untilDescription = recursionInput.until()
         // Transform until: #node.value# -> paramName in both condition and result
-        const nativeUntilCondition = transformNodeValueToParam(untilDescription.condition, paramName)
-        const nativeUntilResult = transformNodeValueToParam(untilDescription.result, paramName)
+        const nativeUntilCondition = transformNodeToParam(untilDescription.condition, paramName)
+        const nativeUntilResult = transformNodeToParam(untilDescription.result, paramName)
         const nativeUntil = {
             condition: nativeUntilCondition,
             result: nativeUntilResult

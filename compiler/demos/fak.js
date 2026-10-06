@@ -3,15 +3,15 @@ import RecursionLibrary from '../recursion-library.js'
 function fak(n) {
     return {
         delta: function (node) {
-            return ['#node.value# - 1']
+            return ['#node# - 1']
         },
 
         combine: function (node) {
-            return '#node.value# * #node.children[0].value#'
+            return '#node# * #node.children#[0]'
         },
 
         until: function (node) {
-            return { condition: '#node.value# === 1', result: '1' }
+            return { condition: '#node# === 1', result: '1' }
         }
     }
 }

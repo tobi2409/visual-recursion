@@ -5,7 +5,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
-from recursionlibrary import appendChilds, getObject
+from recursionlibrary import appendChildren, getObject
 
 from json import dumps
 
@@ -25,7 +25,7 @@ def dfssum(tree):
     def resultNodeCallback(node):
         return node['value']
 
-    print(dumps(appendChilds([tree], delta, assignCallback=assignCallback, combineCallback=combineCallback,
+    print(dumps(appendChildren([tree], delta, assignCallback=assignCallback, combineCallback=combineCallback,
         resultConditionCallback=resultConditionCallback, resultNodeCallback=resultNodeCallback,
         expandOnEmptyDelta=True, rootValue={'val': 0}, assignResultStoreIn='val'), indent=2))
 
