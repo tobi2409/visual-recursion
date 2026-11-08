@@ -5,7 +5,7 @@ import RecursionLibrary from '../recursion-library.js';
 function dfs(tree) {
     return {
         delta: function (node) {
-            return 'tree.children'
+            return '#node#.children'
         },
         
         combine: function (node) {
@@ -13,7 +13,7 @@ function dfs(tree) {
         },
 
         until: function (node) {
-            return { condition: 'tree.children.length === 0', result: '#node#' }
+            return { condition: '#node#.children.length === 0', result: '#node#' }
         }
     }
 }
