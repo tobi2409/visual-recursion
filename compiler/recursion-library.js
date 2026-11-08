@@ -26,11 +26,13 @@ const RecursionLibrary = (function() {
         const recursionInput = fn()
 
         const deltaDescription = recursionInput.delta()
-        // Transform each delta expression: '#node#' -> paramName, then wrap with function call
-        const nativeDelta = deltaDescription.map((d) => {
-            const transformed = transformNodeToParam(d, paramName)
-            return wrapWithFunctionCall(transformed, fnName)
-        })
+        // Arrays describe fixed recursive arguments; a string describes a dynamic collection.
+        const nativeDelta = Array.isArray(deltaDescription)
+            ? deltaDescription.map((delta) => {
+                const transformed = transformNodeToParam(delta, paramName)
+                return wrapWithFunctionCall(transformed, fnName)
+            })
+            : transformNodeToParam(deltaDescription, paramName)
         
         const combineDescription = recursionInput.combine()
         // Transform combine: indexed children first, then generic children, then node param
@@ -66,7 +68,11 @@ const RecursionLibrary = (function() {
         code += `    }\n\n`
         
         // Add delta (recursive calls)
-        code += `    const deltaed = [${nativeDelta.join(', ')}]\n\n`
+        if (Array.isArray(nativeDelta)) {
+            code += `    const deltaed = [${nativeDelta.join(', ')}]\n\n`
+        } else {
+            code += `    const deltaed = ${nativeDelta}.map((${paramName}) => ${fnName}(${paramName}))\n\n`
+        }
         
         // Add combine
         code += `    const combined = ${nativeCombine}\n\n`
