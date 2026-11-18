@@ -71,7 +71,7 @@ const RecursionLibrary = (function() {
         if (Array.isArray(nativeDelta)) {
             code += `    const deltaed = [${nativeDelta.join(', ')}]\n\n`
         } else {
-            code += `    const deltaed = ${nativeDelta}.map((${paramName}) => ${fnName}(${paramName}))\n\n`
+            code += `    const deltaed = ${nativeDelta}.map((element) => ${fnName}(element))\n\n`
         }
         
         // Add combine
